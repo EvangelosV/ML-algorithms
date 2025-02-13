@@ -1,7 +1,7 @@
 import os
 import glob
 import re
-from tensorflow.keras.datasets import imdb
+from keras.api.datasets import imdb
 
 def tokenize(text):
     """ Επιστρέφει μια λίστα λέξεων (σε πεζά) από το κείμενο. """
