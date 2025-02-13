@@ -19,7 +19,9 @@ def main():
 
     # Φόρτωση δεδομένων από το Keras IMDB dataset
     print(" \n*** Booting up *** \n")
-    print("Τιμές υπερπαραμέτρων:\nΌριο λέξεων")
+    print("Τιμές υπερπαραμέτρων:\nΌριο λέξεων:", num_words, "\nΜέγεθος dev set:", dev_size, "\nΠιο συχνές λέξεις(discard):", n,
+           "\nΠιο σπάνιες λέξεις(discard):", k, "\nΜέγεθος λεξιλογίου:", m, "\nLaplace Smoothing (α):",
+             alpha, "\n(Random Forest)Δέντρα:", n_trees, "\n(Random Forest)Μέγιστο βάθος:", max_depth)
     print("Φόρτωση δεδομένων IMDB από το Keras API...")
     (train_texts, train_labels), (dev_texts, dev_labels), (test_texts, test_labels) = load_imdb_data(num_words=num_words, dev_size=dev_size)
     print("Αριθμός εκπαιδευτικών παραδειγμάτων:", len(train_texts))
@@ -44,19 +46,15 @@ def main():
     
     print("Μετρικές Εκπαίδευσης (BernoulliNB):")
     # Χρησιμοποιούμε pprint για πιο καθαρή εμφάνιση (χωρίς np.float64/np.int64)
-    print(nb_train_metrics)
+    #print(nb_train_metrics)
+    for metric_name, value in nb_train_metrics.items():
+        print(f"{metric_name}: {value}")
     
     # Learning curves μόνο για τα metrics (precision, recall, f1) της θετικής κατηγορίας (π.χ. class 1)
     train_sizes = np.linspace(100, len(X_train), 5, dtype=int)
     print("\nΠαραγωγή learning curves για την θετική κατηγορία (BernoulliNB)...")
-    plot_learning_curves_for_category(
-        BernoulliNB,
-        X_train, train_labels,
-        X_dev, dev_labels,
-        train_sizes,
-        classifier_params={'alpha': alpha},
-        category=1
-    )
+    plot_learning_curves_for_category(BernoulliNB, X_train, train_labels, X_dev, dev_labels,
+        train_sizes, classifier_params={'alpha': alpha},category=1)
     
     # ------------------ Εκπαίδευση & Αξιολόγηση Random Forest ------------------
     print("\n--- Εκπαίδευση Random Forest ---")
@@ -66,17 +64,14 @@ def main():
     rf_train_metrics = compute_metrics(train_labels, rf_train_preds)
     
     print("Μετρικές Εκπαίδευσης (Random Forest):")
-    print(rf_train_metrics)
+    #print(rf_train_metrics)
+    for metric_name, value in nb_train_metrics.items():
+        print(f"{metric_name}: {value}")
     
     # Learning curves για τα micro & macro metrics (συμπεριλαμβάνουν όλες τις κατηγορίες)
     print("\nΠαραγωγή learning curves (Micro & Macro) για τον Random Forest...")
-    plot_learning_curves_micro_macro(
-        RandomForest,
-        X_train, train_labels,
-        X_dev, dev_labels,
-        train_sizes,
-        classifier_params={'n_trees': n_trees, 'max_depth': max_depth, 'max_features': 'sqrt'}
-    )
+    plot_learning_curves_micro_macro(RandomForest, X_train, train_labels, X_dev, dev_labels,
+        train_sizes, classifier_params={'n_trees': n_trees, 'max_depth': max_depth, 'max_features': 'sqrt'})
     
     # Μπορείς επίσης να αξιολογήσεις σε dev και test σύνολα
 

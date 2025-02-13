@@ -18,7 +18,7 @@ def compute_metrics(y_true, y_pred):
         precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
         recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
         f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
-        metrics[int(cls)] = {'precision': float(precision), 'recall': float(recall), 'f1': float(f1)}
+        metrics[int(cls)] = {'Precision': float(precision), 'Recall': float(recall), 'F1': float(f1)}
     # Micro-average
     tp_total = sum(np.sum((y_true == cls) & (y_pred == cls)) for cls in classes)
     fp_total = sum(np.sum((y_true != cls) & (y_pred == cls)) for cls in classes)
@@ -26,12 +26,12 @@ def compute_metrics(y_true, y_pred):
     micro_precision = tp_total / (tp_total + fp_total) if (tp_total + fp_total) > 0 else 0.0
     micro_recall = tp_total / (tp_total + fn_total) if (tp_total + fn_total) > 0 else 0.0
     micro_f1 = 2 * micro_precision * micro_recall / (micro_precision + micro_recall) if (micro_precision + micro_recall) > 0 else 0.0
-    metrics['micro'] = {'precision': float(micro_precision), 'recall': float(micro_recall), 'f1': float(micro_f1)}
+    metrics['micro'] = {'Precision': float(micro_precision), 'Recall': float(micro_recall), 'F1': float(micro_f1)}
     # Macro-average
-    macro_precision = np.mean([metrics[int(cls)]['precision'] for cls in classes])
-    macro_recall = np.mean([metrics[int(cls)]['recall'] for cls in classes])
-    macro_f1 = np.mean([metrics[int(cls)]['f1'] for cls in classes])
-    metrics['macro'] = {'precision': float(macro_precision), 'recall': float(macro_recall), 'f1': float(macro_f1)}
+    macro_precision = np.mean([metrics[int(cls)]['Precision'] for cls in classes])
+    macro_recall = np.mean([metrics[int(cls)]['Recall'] for cls in classes])
+    macro_f1 = np.mean([metrics[int(cls)]['F1'] for cls in classes])
+    metrics['macro'] = {'Precision': float(macro_precision), 'Recall': float(macro_recall), 'F1': float(macro_f1)}
     return metrics
 
 def plot_learning_curves_for_category(classifier_class, X_train, y_train, X_dev, y_dev, train_sizes, classifier_params={}, category=1):
@@ -48,7 +48,7 @@ def plot_learning_curves_for_category(classifier_class, X_train, y_train, X_dev,
       - classifier_params: dictionary υπερπαραμέτρων για τον ταξινομητή
       - category: η κατηγορία για την οποία θέλουμε τα metrics (π.χ. 1 για τις θετικές κριτικές)
     """
-    metrics_list = ['precision', 'recall', 'f1']
+    metrics_list = ['Precision', 'Recall', 'F1']
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
     
     for idx, metric in enumerate(metrics_list):
@@ -83,7 +83,7 @@ def plot_learning_curves_micro_macro(classifier_class, X_train, y_train, X_dev, 
     Δημιουργεί 3 subplots για precision, recall και f1, με δύο γραμμές για το training (micro, macro)
     και δύο για το development set (micro, macro).
     """
-    metrics_list = ['precision', 'recall', 'f1']
+    metrics_list = ['Precision', 'Recall', 'F1']
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
     
     for idx, metric in enumerate(metrics_list):
