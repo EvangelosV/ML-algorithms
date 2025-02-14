@@ -1,7 +1,7 @@
 import math
 import numpy as np
 
-class BernoulliNB:
+class NaiveBayes:
     def __init__(self, alpha=1.0):
         self.alpha = alpha
         self.class_log_prior_ = {}
