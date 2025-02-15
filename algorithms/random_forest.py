@@ -3,16 +3,18 @@ from sklearn.tree import DecisionTreeClassifier
 from collections import Counter
 
 class RandomForest:
-    def __init__(self, n_trees=10, max_depth=None, max_features='sqrt'):
+    def __init__(self, n_trees=10, max_depth=None, max_features='sqrt',
+             min_samples_split=2, min_samples_leaf=1, random_state=None):
         self.n_trees = n_trees
         self.max_depth = max_depth
         self.max_features = max_features
         self.trees = []
 
+
     def fit(self, X, y):
         n_samples = len(X)
         self.trees = []
-        for _ in range(self.n_trees):
+        for i in range(self.n_trees):
             indices = np.random.choice(n_samples, size=n_samples, replace=True)
             X_sample = [X[i] for i in indices]
             y_sample = [y[i] for i in indices]

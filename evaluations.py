@@ -74,7 +74,7 @@ def plot_learning_curves_for_category(classifier_class, X_train, y_train, X_dev,
         axes[idx].legend()
         axes[idx].grid(True)
     plt.tight_layout()
-    filename = "NB_positive_learning_curves.png" if classifier_class.__name__ == 'NaiveBayes' else "RF_positive_learning_curves.png"
+    filename = classifier_class.__name__+"positive_learning_curves.png" 
     plt.savefig(filename)
     print(" ! Saved as "+filename+" in the folder !")
     #plt.ion()
@@ -119,7 +119,7 @@ def plot_learning_curves_micro_macro(classifier_class, X_train, y_train, X_dev, 
         axes[idx].legend()
         axes[idx].grid(True)
     plt.tight_layout()
-    filename = "NB_micro_macro_learning_curves.png" if classifier_class.__name__ == 'NaiveBayes' else "RF_micro_macro_learning_curves.png"
+    filename = classifier_class.__name__+"_micro_macro_learning_curves.png" 
     plt.savefig(filename)
     print(" ! Saved as "+filename+" in the folder !")
     #plt.ion()

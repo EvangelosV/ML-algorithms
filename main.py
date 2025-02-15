@@ -17,8 +17,9 @@ def main():
     k = 30            # k πιο σπάνιες λέξεις για απόρριψη
     m = 1000          # Μέγεθος λεξιλογίου μετά την επιλογή
     alpha = 1.0       # Smoothing για τον NB
-    n_trees = 35      # Πλήθος δέντρων για το Random Forest 50 TOO BIG
-    max_depth = 20    # Μέγιστο βάθος των δέντρων 10 TOO SMALL
+    n_trees = 30      # Πλήθος δέντρων για το Random Forest 50 TOO BIG 35 TOO BIG
+    max_depth = 15    # Μέγιστο βάθος των δέντρων 10 TOO SMALL 
+
     # ---------------------------------------------------------------------
 
     # Φόρτωση δεδομένων από το Keras IMDB dataset
@@ -78,8 +79,8 @@ def main():
         formatted_value = {k: round(v, 3) for k, v in value.items()}
         print(f"{metric_name}: {formatted_value}")
    
-    print("Learning curves may take a while to generate...")
-    print("\nRANDOM FOREST - Creating learning curves only for positive category (cls=1)...")
+    print("\nLearning curves may take a while to generate...")
+    print("RANDOM FOREST - Creating learning curves only for positive category (cls=1)...")
     plot_learning_curves_for_category(RandomForest, X_train, train_labels, X_dev, dev_labels,
         train_sizes, classifier_params={'n_trees': n_trees, 'max_depth': max_depth, 'max_features': 'sqrt'},category=1)
 
@@ -91,7 +92,7 @@ def main():
 
     # ------------------ Scikit-Learn Naive Bayes ------------------
     print("\n=== Scikit-Learn Naive Bayes ===")
-    sk_nb = SKNaiveBayes(alpha=alpha, binarize=0.0)
+    sk_nb = SKNaiveBayes(alpha=alpha)
     sk_nb.fit(X_train, train_labels)
     sk_nb_preds = sk_nb.predict(X_train)
     sk_nb_metrics = compute_metrics(train_labels, sk_nb_preds)
@@ -103,11 +104,11 @@ def main():
     
     print("\nScikit-Learn NB - Learning curves for positive category (cls=1)...")
     plot_learning_curves_for_category(SKNaiveBayes, X_train, train_labels, X_dev, dev_labels,
-                                      train_sizes, classifier_params={'alpha': alpha, 'binarize': 0.0}, category=1)
+                                      train_sizes, classifier_params={'alpha': alpha}, category=1)
     
     print("Scikit-Learn NB - Learning curves for Micro & Macro averages...")
     plot_learning_curves_micro_macro(SKNaiveBayes, X_train, train_labels, X_dev, dev_labels,
-                                     train_sizes, classifier_params={'alpha': alpha, 'binarize': 0.0})
+                                     train_sizes, classifier_params={'alpha': alpha})
     
     # ------------------ Scikit-Learn Random Forest ------------------
     print("\n=== Scikit-Learn Random Forest ===")
