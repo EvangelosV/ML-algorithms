@@ -8,6 +8,16 @@ from sklearn.naive_bayes import BernoulliNB as SKNaiveBayes
 from sklearn.ensemble import RandomForestClassifier as SKRandomForest
 from sklearn.neural_network import MLPClassifier as SKMLP
 
+# ------------------ Μέρος Γ: Εισαγωγές για το RNN ------------------
+import torch
+import torch.optim as optim
+import torch.nn as nn
+import matplotlib.pyplot as plt
+from torch.utils.data import DataLoader
+from rnn_dataset import TextDataset
+from rnn_model import StackedBiRNN
+from rnn_utils import train_model, evaluate_model, plot_loss_curves
+
 
 def main():
     # ------------------- Ρυθμίσεις & Υπερπαράμετροι --------------------
@@ -43,7 +53,7 @@ def main():
     
     train_sizes = np.linspace(100, len(X_train), 5, dtype=int)
     
-    # ------------------ Εκπαίδευση & Αξιολόγηση Bernoulli Naive Bayes ------------------
+    '''# ------------------ Εκπαίδευση & Αξιολόγηση Bernoulli Naive Bayes ------------------
     print("\n--- Naive Bayes ---")
     nb = NaiveBayes(alpha=alpha)
     nb.fit(X_train, train_labels)
@@ -128,7 +138,70 @@ def main():
     
     print("Scikit-Learn RF - Learning curves for Micro & Macro averages...")
     plot_learning_curves_micro_macro(SKRandomForest, X_train, train_labels, X_dev, dev_labels,
-                                     train_sizes, classifier_params={'n_estimators': n_trees, 'max_depth': max_depth})
+                                     train_sizes, classifier_params={'n_estimators': n_trees, 'max_depth': max_depth})'''
+
+
+
+    # ------------------ Μέρος Γ: Stacked Bidirectional RNN με PyTorch ------------------
+
+    print("\n\n*** Stacked Bidirectional RNN ***\n")
+    # Ρυθμίσεις για το RNN
+    embed_dim = 100     # Διάσταση των embeddings
+    hidden_dim = 128    # Μέγεθος κρυφού χώρου για το LSTM
+    output_dim = 2      # Δύο κλάσεις (binary classification)
+    n_layers = 2        # Αριθμός στοιβαγμένων επιπέδων
+    dropout = 0.5
+    num_epochs = 8     # Αριθμός εποχών (επιλέξτε βάσει του dev set)
+    learning_rate = 0.001
+    max_length = 100    # Μέγιστο μήκος ακολουθίας για κάθε κείμενο
+
+    print("Ρυθμίσεις RNN:")
+    print("Embedding dim:", embed_dim)
+    print("Hidden dim:", hidden_dim)
+    print("Αριθμός στοιβαγμένων επιπέδων:", n_layers)
+    print("Dropout:", dropout)
+    print("Learning rate:", learning_rate)
+    print("Αριθμός εποχών:", num_epochs)
+    
+    
+    # Δημιουργία dataset για το RNN (με τα κείμενα ως strings και το ίδιο λεξιλόγιο)
+    
+    train_dataset = TextDataset(train_texts, train_labels, vocabulary, max_length=max_length)
+    dev_dataset = TextDataset(dev_texts, dev_labels, vocabulary, max_length=max_length)
+    test_dataset = TextDataset(test_texts, test_labels, vocabulary, max_length=max_length)
+    
+    batch_size = 64
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    dev_loader = DataLoader(dev_dataset, batch_size=batch_size)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size)
+    
+    vocab_size = len(vocabulary) + 1  # +1 για padding (index 0)
+    
+    
+    # Δημιουργία του μοντέλου RNN
+    
+    model = StackedBiRNN(vocab_size=vocab_size, embed_dim=embed_dim, hidden_dim=hidden_dim,
+                         output_dim=output_dim, n_layers=n_layers, dropout=dropout, bidirectional=True)
+    
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    criterion = nn.CrossEntropyLoss()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    print("\nΕκπαίδευση του RNN μοντέλου...")
+    model, train_losses, dev_losses, best_epoch = train_model(model, train_loader, dev_loader, optimizer, criterion, num_epochs, device)
+    print(f"Καλύτερη εποχή: {best_epoch}")
+    
+    print("\nΑπεικόνιση καμπυλών απώλειας (loss curves)...")
+    plot_loss_curves(train_losses, dev_losses)
+    
+    print("\nΑξιολόγηση του RNN μοντέλου στο test set...")
+    test_true, test_preds = evaluate_model(model, test_loader, device)
+    rnn_test_metrics = compute_metrics(test_true, test_preds)
+    print("\nΜετρικές Test για το RNN:")
+    for metric_name, value in rnn_test_metrics.items():
+        formatted_value = {k: round(v, 3) for k, v in value.items()}
+        print(f"{metric_name}: {formatted_value}")
+
 
 if __name__ == '__main__':
     main()
