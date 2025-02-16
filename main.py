@@ -103,7 +103,7 @@ def main():
    
 
     # ------------------ Scikit-Learn Naive Bayes ------------------
-    print("\n=== Scikit-Learn Naive Bayes ===")
+    print("\n--- Scikit-Learn Naive Bayes ---")
     sk_nb = SKNaiveBayes(alpha=alpha)
     sk_nb.fit(X_train, train_labels)
     sk_nb_preds = sk_nb.predict(X_train)
@@ -129,7 +129,7 @@ def main():
     
 
     # ------------------ Scikit-Learn Random Forest ------------------
-    print("\n=== Scikit-Learn Random Forest ===")
+    print("\n--- Scikit-Learn Random Forest ---")
     sk_rf = SKRandomForest(n_estimators=n_trees, max_depth=max_depth)
     sk_rf.fit(X_train, train_labels)
     sk_rf_preds = sk_rf.predict(X_train)
@@ -154,7 +154,7 @@ def main():
 
 
     # ------------------ Stacked Bidirectional RNN me PyTorch ------------------
-    print("\n*** Stacked Bidirectional RNN ***\n")
+    print("\n--- Stacked Bidirectional RNN ---\n")
     #Yperparametroi gia to RNN
     embed_dim = 100     # embeddings dimension
     hidden_dim = 128    # hidden space size LSTM
@@ -165,7 +165,7 @@ def main():
     learning_rate = 0.001
     max_length = 100    # max length keimenou
 
-    print("Ρυθμίσεις RNN:")
+    print("Υπερπαραμέτροι RNN:")
     print("Embedding dim:", embed_dim)
     print("Hidden dim:", hidden_dim)
     print("Αριθμός στοιβαγμένων επιπέδων:", n_layers)

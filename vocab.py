@@ -51,11 +51,9 @@ def build_vocabulary(texts, labels, n, k, m):
     return vocabulary
 
 def text_to_feature_vector(text, vocabulary):
-
     words = set(tokenize(text))
     vector = [1 if word in words else 0 for word in vocabulary.keys()]
     return vector
 
 def transform_texts(texts, vocabulary):
-
     return [text_to_feature_vector(text, vocabulary) for text in texts]
