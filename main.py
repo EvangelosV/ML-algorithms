@@ -12,9 +12,9 @@ import torch.optim as optim
 import torch.nn as nn
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
-from rnn_dataset import TextDataset
-from rnn_model import StackedBiRNN
-from rnn_utils import train_model, evaluate_model, plot_loss_curves
+from RNN.rnn_dataset import TextDataset
+from RNN.rnn_model import StackedBiRNN
+from RNN.rnn_utils import train_model, evaluate_model, plot_loss_curves
 
 
 def main():
