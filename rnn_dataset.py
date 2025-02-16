@@ -3,11 +3,7 @@ from torch.utils.data import Dataset
 
 class TextDataset(Dataset):
     def __init__(self, texts, labels, vocab, max_length=100):
-        """
-        Μετατρέπει κάθε κείμενο (string) σε ακολουθία από δείκτες λέξεων, 
-        χρησιμοποιώντας το λεξιλόγιο (0 για λέξεις που δεν υπάρχουν).
-        Τα sequences παρεμβάλλονται ή περικόπττονται σε σταθερό max_length.
-        """
+
         self.sequences = [self.text_to_sequence(text, vocab, max_length) for text in texts]
         self.labels = labels
 

@@ -3,13 +3,7 @@ from collections import defaultdict
 from preprocessing import tokenize
 
 def build_vocabulary(texts, labels, n, k, m):
-    """
-    Δημιουργεί λεξιλόγιο με βάση τα κείμενα και τις ετικέτες:
-     - Υπολογισμός document frequency.
-     - Απόρριψη των n πιο συχνών και k πιο σπάνιων λέξεων.
-     - Επιλογή των m λέξεων με το υψηλότερο information gain.
-    Επιστρέφει λεξικό {λέξη: index}.
-    """
+
     doc_counts = defaultdict(int)
     pos_counts = defaultdict(int)
     neg_counts = defaultdict(int)
@@ -57,11 +51,11 @@ def build_vocabulary(texts, labels, n, k, m):
     return vocabulary
 
 def text_to_feature_vector(text, vocabulary):
-    """ Μετατρέπει ένα κείμενο σε δυαδικό διάνυσμα χαρακτηριστικών. """
+
     words = set(tokenize(text))
     vector = [1 if word in words else 0 for word in vocabulary.keys()]
     return vector
 
 def transform_texts(texts, vocabulary):
-    """ Μετατρέπει λίστα κειμένων σε πίνακα διανυσμάτων. """
+
     return [text_to_feature_vector(text, vocabulary) for text in texts]

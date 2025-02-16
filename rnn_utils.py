@@ -67,7 +67,7 @@ def plot_loss_curves(train_losses, dev_losses):
     plt.title("Loss vs. Epochs")
     plt.legend()
     plt.tight_layout()
-    filename = "loss_curves.png"
+    filename = "Loss_Curves_RNN.png"
     plt.savefig(filename)
     plt.close()
     #plt.show()

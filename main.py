@@ -7,8 +7,6 @@ import numpy as np
 from sklearn.naive_bayes import BernoulliNB as SKNaiveBayes
 from sklearn.ensemble import RandomForestClassifier as SKRandomForest
 from sklearn.neural_network import MLPClassifier as SKMLP
-
-# ------------------ Μέρος Γ: Εισαγωγές για το RNN ------------------
 import torch
 import torch.optim as optim
 import torch.nn as nn
@@ -72,7 +70,7 @@ def main():
 
     nb_test_preds = nb.predict(X_test)
     nb_test_metrics = compute_metrics(test_labels, nb_test_preds)
-    print("* Metrics for Naive Bayes Algorithm: Testing Data *")
+    print("\n* Metrics for Naive Bayes Algorithm: Testing Data *")
     for metric_name, value in nb_test_metrics.items():
         formatted_value = {k: round(v, 3) for k, v in value.items()}
         print(f"{metric_name}: {formatted_value}")
@@ -98,7 +96,7 @@ def main():
     
     rf_test_preds = rf.predict(X_test)
     rf_test_metrics = compute_metrics(test_labels, rf_test_preds)
-    print("* Metrics for Random Forest Algorithm: Testing Data *")
+    print("\n* Metrics for Random Forest Algorithm: Testing Data *")
     for metric_name, value in rf_test_metrics.items():
         formatted_value = {k: round(v, 3) for k, v in value.items()}
         print(f"{metric_name}: {formatted_value}")
@@ -156,7 +154,7 @@ def main():
 
 
     # ------------------ Stacked Bidirectional RNN me PyTorch ------------------
-    print("\n\n*** Stacked Bidirectional RNN ***\n")
+    print("\n*** Stacked Bidirectional RNN ***\n")
     #Yperparametroi gia to RNN
     embed_dim = 100     # embeddings dimension
     hidden_dim = 128    # hidden space size LSTM
@@ -197,18 +195,16 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     criterion = nn.CrossEntropyLoss()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    print("\nΕκπαίδευση του RNN μοντέλου...")
     model, train_losses, dev_losses, best_epoch = train_model(model, train_loader, dev_loader, optimizer, criterion, num_epochs, device)
-    print(f"Καλύτερη εποχή: {best_epoch}")
+    print(f"Best Epoch: {best_epoch}")
     
-    print("\nΑπεικόνιση καμπυλών απώλειας (loss curves)...")
+    print("\nLoss Curves for RNN:")
     plot_loss_curves(train_losses, dev_losses)
+    print(" ! Saved as Loss_Curves_RNN.png in the folder !")
     
-    print("\nΑξιολόγηση του RNN μοντέλου στο test set...")
     test_true, test_preds = evaluate_model(model, test_loader, device)
     rnn_test_metrics = compute_metrics(test_true, test_preds)
-    print("\nΜετρικές Test για το RNN:")
+    print("\nTesting Data Metrics RNN:")
     for metric_name, value in rnn_test_metrics.items():
         formatted_value = {k: round(v, 3) for k, v in value.items()}
         print(f"{metric_name}: {formatted_value}")
