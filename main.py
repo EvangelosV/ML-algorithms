@@ -53,7 +53,7 @@ def main():
     
     train_sizes = np.linspace(100, len(X_train), 5, dtype=int)
     
-    '''# ------------------ Εκπαίδευση & Αξιολόγηση Bernoulli Naive Bayes ------------------
+    # ------------------ Εκπαίδευση & Αξιολόγηση Bernoulli Naive Bayes ------------------
     print("\n--- Naive Bayes ---")
     nb = NaiveBayes(alpha=alpha)
     nb.fit(X_train, train_labels)
@@ -138,7 +138,7 @@ def main():
     
     print("Scikit-Learn RF - Learning curves for Micro & Macro averages...")
     plot_learning_curves_micro_macro(SKRandomForest, X_train, train_labels, X_dev, dev_labels,
-                                     train_sizes, classifier_params={'n_estimators': n_trees, 'max_depth': max_depth})'''
+                                     train_sizes, classifier_params={'n_estimators': n_trees, 'max_depth': max_depth})
 
 
 
